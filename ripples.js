@@ -29,8 +29,8 @@
         }
         function circle(evt) {
             mousePos = {
-                x: evt.x - canvas.offsetLeft,
-                y: evt.y - canvas.offsetTop
+                x: evt.layerX,
+                y: evt.layerY
             };
             if (!auto) {
                 var newCircle = {
