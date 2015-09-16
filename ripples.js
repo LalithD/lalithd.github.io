@@ -10,21 +10,73 @@
         var mousePos = null;
         var auto = true;
         var stop = false;
-        var pause = false;
-        canvas.addEventListener("mousemove", circle, false);
-        canvas.addEventListener("keydown", checkKey, false);
+        var pause = true;
+        var click = false;
+        var initRadius = 5;
+        var createSpeed = 20;
+        var colorSpeed = 25;
+        document.addEventListener("mousemove", circle, false);
+        document.addEventListener("mousedown", function() { if(click) {circles.push(createCircle());} }, false);
+        document.addEventListener("keydown", checkKey, false);
+        document.getElementById("click_ripples").onclick = function() {
+            if (click) {
+                document.getElementById("click_ripples").style.color = "red";
+                document.getElementById("click_ripples").innerHTML = "OFF";
+            } else {
+                document.getElementById("click_ripples").style.color = "green";
+                document.getElementById("click_ripples").innerHTML = "ON";
+            }
+            click = !click;
+        };
+        document.querySelector("input.radius").onchange = function() {
+            initRadius = parseInt(document.querySelector("input.radius").value);
+            document.querySelector("label.radius").innerHTML = "Radius (" + initRadius + " px): ";
+        };
+        document.getElementById("autoripples").onclick = function() {
+            if (auto) {
+                document.getElementById("autoripples").style.color = "red";
+                document.getElementById("autoripples").innerHTML = "OFF";
+            } else {
+                document.getElementById("autoripples").style.color = "green";
+                document.getElementById("autoripples").innerHTML = "ON";
+            }
+            auto = !auto;
+        };
+        document.querySelector("input.create_speed").onchange = function() {
+            createSpeed = parseInt(document.querySelector("input.create_speed").value * 1000);
+            document.querySelector("label.create_speed").innerHTML = "Delay (" + createSpeed + " ms): ";
+        };
+        document.querySelector("input.color").onchange = function() {
+            colorSpeed = parseInt(document.querySelector("input.color").value);
+            var description = "Slowest";
+            if (colorSpeed <= 10) {
+                description = "Fastest";
+            } else if (colorSpeed <= 20) {
+                description = "Fast";
+            } else if (colorSpeed <= 40) {
+                description = "Normal";
+            } else if (colorSpeed <= 100) {
+                description = "Slower";
+            }
+            document.querySelector("label.color").innerHTML = "Delay (" + description + "): ";
+        };
         var prevTime = new Date().getTime();
+        var lastFrame = new Date().getTime();
         animation();
         function checkKey(evt) {
-            if (evt.keyCode == "c".charCodeAt(0) - 32) {
-                circles = [];
-            }
             if (evt.keyCode == "p".charCodeAt(0) - 32) {
                 pause = !pause;
                 animation();
             }
             if (evt.keyCode === 27) {
-                document.getElementById("options").style.display = "block";
+                if (document.getElementById("options").style.display === "none") {
+                    document.getElementById("options").style.display = "block";
+                    pause = true;
+                } else {
+                    document.getElementById("options").style.display = "none";
+                    pause = false;
+                    animation();
+                }
             }
         }
         function circle(evt) {
@@ -33,33 +85,29 @@
                 y: evt.layerY
             };
             if (!auto) {
-                var newCircle = {
-                    x: mousePos.x,
-                    y: mousePos.y,
-                    radius: 5,
-                    hsl: (new Date().getTime()/25)%360,
-                    transparency: 1
-                };
-                circles.push(newCircle);
+                circles.push(createCircle());
             }
         }
         function newCircle() {
-            if (mousePos !== null && auto && noMovement(stop)) {
-                circles.push({
-                    x: mousePos.x,
-                    y: mousePos.y,
-                    radius: 0,
-                    hsl: Math.floor(new Date().getTime()/25)%360,
-                    transparency: 1
-                });
+            if (mousePos !== null && auto && !click && noMovement(stop)) {
+                circles.push(createCircle());
             }
+        }
+        function createCircle() {
+            return {
+                x: mousePos.x,
+                y: mousePos.y,
+                radius: initRadius,
+                hue: Math.floor(new Date().getTime()/colorSpeed)%360,
+                transparency: 1
+            };
         }
         function noMovement(stop) {
             return !stop || mousePos.prevX !== mousePos.x || mousePos.prevY !== mousePos.y;
         }
         function animation() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (new Date().getTime() - prevTime > 25) {
+            if (new Date().getTime() - prevTime > createSpeed) {
                 newCircle();
                 prevTime = new Date().getTime();
             }
@@ -73,13 +121,14 @@
                     circles.splice(i, 1);
                 }
                 ctx.beginPath();
-                ctx.strokeStyle = "hsla("+ circle.hsl + ", 100%, 50%, " + circle.transparency + ")";
+                ctx.strokeStyle = "hsla("+ circle.hue + ", 100%, 50%, " + circle.transparency + ")";
                 ctx.lineWidth = 1;
                 ctx.arc(circle.x, circle.y, circle.radius, 0, 2*Math.PI, false);
                 ctx.stroke();
-                circle.transparency -= 0.01;
-                circle.radius += 2;
+                circle.transparency -= (new Date().getTime() - lastFrame)/1000;
+                circle.radius += (new Date().getTime() - lastFrame)/5;
             }
+            lastFrame = new Date().getTime();
             if (!pause) {
                 window.requestAnimationFrame(animation);
             }

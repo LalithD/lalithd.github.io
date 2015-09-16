@@ -11,23 +11,70 @@
 		canvas {
 			cursor: crosshair;
 			background-color: black;
-			z-index: 200;
+			position: absolute;
+			tabindex: 1;
+			z-index: 1;
+		}
+		p, h1 {
+			text-align: center;
+		}
+		#autoripples, #click_ripples {
+			border: none;
+			background-color: inherit;
+			font-weight: bold;
+		}
+		#autoripples {
+			color: green;
+		}
+		#click_ripples {
+			color: red;
+		}
+		input {
+			margin-left: 20px;
+			margin-top: 5px;
 		}
 		#options {
-			background-color: red;
+			padding: 10px;
+			color: #A9A9A9;
+			background-color: #242424;
+			border: 2px solid #444444;
+			border-radius: 10px;
 			position: fixed;
-			height: 100%;
-			width: 100%;
+			margin-top: 10%;
+			margin-left: 25%;
+			height: 60%;
+			width: 50%;
 			display: block;
-			z-index: 100;
+			z-index: 2;
+			font-size: 20px;
 		}
 	</style>
 	<script src="ripples.js"></script>
 </head>
 <body>
-	<canvas id="panel" width="1080" height="720" tabindex="1"></canvas>
+	<canvas id="panel" width="1080" height="720"></canvas>
 	<div id="options">
-		<button id="stop">Toggle ripples when mouse is not moving</button>
+		<p>This page allows you to create colorful ripples by moving your mouse.</p>
+		<br />
+		<h1>Settings</h1>
+		<br />
+		<p>Press "P" to pause, ESC to open/close settings</p>
+		<br />
+		Ripples when mouse is not moving: <button id="autoripples">ON</button>
+		<br />
+		Click to create ripples <button id="click_ripples">OFF</button>
+		<br />
+		<label class="radius">Initial Radius (5 px): </label>
+		<input type="range" min="0" max="50" step="1" value="5" class="radius"></input>
+		<br />
+		<label class="create_speed">Delay (0.05 s): </label>
+		<input type="range" min="0" max="1" step="0.05" value="0.05" class="create_speed"></input>
+		<br />
+		<label class="disappear">Disappearing Time (0.05 s): </label>
+		<input type="range" min="0" max="2" step="0.01" value="0.05" class="disappear"></input>
+		<br />
+		<label class="color">Color Change (Normal): </label>
+		<input type="range" min="1" max="200" step="5" value="25" class="color"></input>
 	</div>
 </body>
 </html>
