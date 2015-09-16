@@ -32,6 +32,17 @@
             console.log(getColor);
             document.getElementById("easter_egg").style.color = "rgb(255, 0 , 0)";
         };
+        document.getElementById("cursor").onclick = function() {
+            if (document.getElementById("cursor").style.color === "red") {
+                document.getElementById("cursor").style.color = "green";
+                document.getElementById("cursor").innerHTML = "ON";
+                document.getElementById("panel").style.cursor = "crosshair";
+            } else {
+                document.getElementById("cursor").style.color = "red";
+                document.getElementById("cursor").innerHTML = "OFF";
+                document.getElementById("panel").style.cursor = "none";
+            }
+        };
         document.getElementById("click_ripples").onclick = function() {
             if (click) {
                 document.getElementById("click_ripples").style.color = "red";
