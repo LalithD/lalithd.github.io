@@ -40,13 +40,20 @@
 			border: 2px solid #444444;
 			border-radius: 10px;
 			position: fixed;
-			margin-top: 10%;
+			margin-top: 5%;
 			margin-left: 25%;
-			height: 60%;
+			height: 80%;
 			width: 50%;
 			display: block;
 			z-index: 2;
 			font-size: 20px;
+		}
+		#author {
+			font-size: 12pt;
+			width: 30%;
+			position: absolute;
+			bottom: 10px;
+			left: 35%;
 		}
 	</style>
 	<script src="ripples.js"></script>
@@ -54,7 +61,7 @@
 <body>
 	<canvas id="panel" width="1080" height="720"></canvas>
 	<div id="options">
-		<p>This page allows you to create colorful ripples by moving your mouse.</p>
+		<p>This page allows you to create <span id="easter_egg">colorful ripples</span> by moving your mouse.</p>
 		<br />
 		<h1>Settings</h1>
 		<br />
@@ -65,16 +72,21 @@
 		Click to create ripples <button id="click_ripples">OFF</button>
 		<br />
 		<label class="radius">Initial Radius (5 px): </label>
-		<input type="range" min="0" max="50" step="1" value="5" class="radius"></input>
+		<input type="range" min="0" max="100" step="1" value="5" class="radius"></input>
 		<br />
-		<label class="create_speed">Delay (0.05 s): </label>
+		<label class="create_speed">Delay (50 ms): </label>
 		<input type="range" min="0" max="1" step="0.05" value="0.05" class="create_speed"></input>
 		<br />
-		<label class="disappear">Disappearing Time (0.05 s): </label>
-		<input type="range" min="0" max="2" step="0.01" value="0.05" class="disappear"></input>
+		<label class="disappear">Disappearing Time (Normal): </label>
+		<input type="range" min="1" max="5" step="1" value="3" class="disappear"></input>
+		<br />
+		<label class="size_speed">Size Increase (Normal): </label>
+		<input type="range" min="1" max="5" step="1" value="3" class="size_speed"></input>
 		<br />
 		<label class="color">Color Change (Normal): </label>
-		<input type="range" min="1" max="200" step="5" value="25" class="color"></input>
+		<input type="range" min="1" max="5" step="1" value="3" class="color"></input>
+		<br />
+		<p id="author">Created by Lalith Devireddy</p>
 	</div>
 </body>
 </html>
