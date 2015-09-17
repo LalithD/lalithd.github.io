@@ -18,7 +18,7 @@
 		p, h1 {
 			text-align: center;
 		}
-		#autoripples, #click_ripples, #cursor {
+		#autoripples, #click_ripples, #cursor, #shape {
 			border: none;
 			background-color: inherit;
 			font-weight: bold;
@@ -28,6 +28,9 @@
 		}
 		#click_ripples {
 			color: red;
+		}
+		#shape {
+			color: orange;
 		}
 		input {
 			margin-left: 20px;
@@ -72,6 +75,8 @@
 		Ripples when mouse is not moving: <button id="autoripples">ON</button>
 		<br />
 		Click to create ripples <button id="click_ripples">OFF</button>
+		<br />
+		Shape: <button id="shape">CIRCLE</button>
 		<br />
 		<label class="radius">Initial Radius (5 px): </label>
 		<input type="range" min="0" max="100" step="1" value="5" class="radius"></input>

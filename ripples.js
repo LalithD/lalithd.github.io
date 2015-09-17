@@ -6,6 +6,7 @@
         var ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        var descriptions = ["", "Slowest", "Slower", "Normal", "Faster", "Fastest"];
         var circles = [];
         var mousePos = null;
         var auto = true;
@@ -17,6 +18,8 @@
         var colorSpeed = 25;
         var disappearTime = 1000;
         var sizeIncrease = 4;
+        var shapes = ["CIRCLE", "TRIANGLE", "SQUARE", "HEXAGON"];
+        var type = shapes[0];
         document.addEventListener("mousemove", circle, false);
         document.addEventListener("mousedown", function() { if(click) {circles.push(createCircle());} }, false);
         document.addEventListener("keydown", checkKey, false);
@@ -54,25 +57,10 @@
             click = !click;
         };
         document.querySelector("input.disappear").onchange = function() {
+            var values = [0, 4000, 2000, 1000, 500, 250];
             var selected = parseInt(document.querySelector("input.disappear").value);
-            var description = null;
-            if (selected === 1) {
-                disappearTime = 4000;
-                description = "Slowest";
-            } else if (selected === 2) {
-                disappearTime = 2000;
-                description = "Slower";
-            } else if (selected === 3) {
-                disappearTime = 1000;
-                description = "Normal";
-            } else if (selected === 4) {
-                disappearTime = 500;
-                description = "Faster";
-            } else if (selected === 5) {
-                disappearTime = 250;
-                description = "Fastest";
-            }
-            document.querySelector("label.disappear").innerHTML = `Disappearing Time (${description}): `;
+            disappearTime = values[selected];
+            document.querySelector("label.disappear").innerHTML = `Disappearing Time (${descriptions[selected]}): `;
         };
         document.querySelector("input.radius").onchange = function() {
             initRadius = parseInt(document.querySelector("input.radius").value);
@@ -88,51 +76,30 @@
             }
             auto = !auto;
         };
+        document.getElementById("shape").onclick = function() {
+            var selectedShape = document.getElementById("shape").innerHTML;
+            for (var i = 0; i < shapes.length; i++) {
+                if (selectedShape === shapes[i]) {
+                    type = shapes[(i+1)%shapes.length];
+                    document.getElementById("shape").innerHTML = type;
+                }
+            }
+        };
         document.querySelector("input.create_speed").onchange = function() {
             createSpeed = parseInt(document.querySelector("input.create_speed").value * 1000);
             document.querySelector("label.create_speed").innerHTML = `Delay (${createSpeed} ms): `;
         };
         document.querySelector("input.size_speed").onchange = function() {
+            var values = [0, 16, 8, 4, 2, 1];
             var selected = parseInt(document.querySelector("input.size_speed").value);
-            var description = null;
-            if (selected === 1) {
-                sizeIncrease = 16;
-                description = "Slowest";
-            } else if (selected === 2) {
-                sizeIncrease = 8;
-                description = "Slower";
-            } else if (selected === 3) {
-                sizeIncrease = 4;
-                description = "Normal";
-            } else if (selected === 4) {
-                sizeIncrease = 2;
-                description = "Faster";
-            } else if (selected === 5) {
-                sizeIncrease = 1;
-                description = "Fastest";
-            }
-            document.querySelector("label.size_speed").innerHTML = `Size Increase (${description}): `;
+            sizeIncrease = values[selected];
+            document.querySelector("label.size_speed").innerHTML = `Size Increase (${descriptions[selected]}): `;
         };
         document.querySelector("input.color").onchange = function() {
+            var values = [0, 100, 50, 25, 10, 1];
             var selected = parseInt(document.querySelector("input.color").value);
-            var description = null;
-            if (selected === 1) {
-                colorSpeed = 100;
-                description = "Slowest";
-            } else if (selected === 2) {
-                colorSpeed = 50;
-                description = "Slower";
-            } else if (selected === 3) {
-                colorSpeed = 25;
-                description = "Normal";
-            } else if (selected === 4) {
-                colorSpeed = 10;
-                description = "Faster";
-            } else if (selected === 5) {
-                colorSpeed = 1;
-                description = "Fastest";
-            }
-            document.querySelector("label.color").innerHTML = `Color Change (${description}): `;
+            colorSpeed = values[selected];
+            document.querySelector("label.color").innerHTML = `Color Change (${descriptions[selected]}): `;
         };
         var prevTime = new Date().getTime();
         var lastFrame = new Date().getTime();
@@ -200,7 +167,24 @@
                 ctx.beginPath();
                 ctx.strokeStyle = "hsla("+ circle.hue + ", 100%, 50%, " + circle.transparency + ")";
                 ctx.lineWidth = 1;
-                ctx.arc(circle.x, circle.y, circle.radius, 0, 2*Math.PI, false);
+                if (type === "CIRCLE") {
+                    ctx.arc(circle.x, circle.y, circle.radius, 0, 2*Math.PI, false);
+                } else if (type === "TRIANGLE") {
+                   ctx.moveTo(circle.x, circle.y-circle.radius);
+                   ctx.lineTo(circle.x+Math.pow(3,0.5)/2*circle.radius, circle.y+circle.radius/2);
+                   ctx.lineTo(circle.x-Math.pow(3,0.5)/2*circle.radius, circle.y+circle.radius/2);
+                   ctx.lineTo(circle.x, circle.y-circle.radius);
+                } else if (type === "SQUARE") {
+                    ctx.rect(circle.x-circle.radius, circle.y-circle.radius, circle.radius * 2, circle.radius * 2);
+                } else if (type === "HEXAGON") {
+                    ctx.moveTo(circle.x+circle.radius, circle.y);
+                    ctx.lineTo(circle.x+circle.radius/2, circle.y+Math.pow(3,0.5)/2*circle.radius);
+                    ctx.lineTo(circle.x-circle.radius/2, circle.y+Math.pow(3,0.5)/2*circle.radius);
+                    ctx.lineTo(circle.x-circle.radius, circle.y);
+                    ctx.lineTo(circle.x-circle.radius/2, circle.y-Math.pow(3,0.5)/2*circle.radius);
+                    ctx.lineTo(circle.x+circle.radius/2, circle.y-Math.pow(3,0.5)/2*circle.radius);
+                    ctx.lineTo(circle.x+circle.radius, circle.y);
+                }
                 ctx.stroke();
                 circle.transparency -= (new Date().getTime() - lastFrame)/disappearTime;
                 circle.radius += (new Date().getTime() - lastFrame)/sizeIncrease;
