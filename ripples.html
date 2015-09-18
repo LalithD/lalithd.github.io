@@ -16,9 +16,10 @@
 			z-index: 1;
 		}
 		p, h1 {
+			margin: 5px;
 			text-align: center;
 		}
-		#autoripples, #click_ripples, #cursor, #shape {
+		button {
 			border: none;
 			background-color: inherit;
 			font-weight: bold;
@@ -37,15 +38,17 @@
 			margin-top: 5px;
 		}
 		#options {
+			font-size: 16pt;
+			font-family: Arial, sans-serif;
 			padding: 10px;
 			color: #A9A9A9;
 			background-color: #242424;
 			border: 2px solid #444444;
 			border-radius: 10px;
 			position: fixed;
-			margin-top: 7.5%;
+			margin-top: 5%;
 			margin-left: 25%;
-			height: 70%;
+			height: 80%;
 			width: 50%;
 			display: block;
 			z-index: 2;
@@ -65,11 +68,8 @@
 	<canvas id="panel" width="1080" height="720"></canvas>
 	<div id="options">
 		<p>This page allows you to create <span id="easter_egg">colorful ripples</span> by moving your mouse.</p>
-		<br />
 		<h1>Settings</h1>
-		<br />
 		<p>Press "P" to pause, ESC to open/close settings</p>
-		<br />
 		Cursor Visible: <button id="cursor">ON</button>
 		<br />
 		Ripples when mouse is not moving: <button id="autoripples">ON</button>
@@ -77,6 +77,12 @@
 		Click to create ripples <button id="click_ripples">OFF</button>
 		<br />
 		Shape: <button id="shape">CIRCLE</button>
+		<br />
+		<label class="rotation">Rotation Speed (None): </label>
+		<input type="range" min="0" max="5" value="0" class="rotation"></input>
+		<br />
+		<label class="thickness">Line Thickness (Thinnest): </label>
+		<input type="range" min="1" max="5" value="1" class="thickness"></input>
 		<br />
 		<label class="radius">Initial Radius (5 px): </label>
 		<input type="range" min="0" max="100" step="1" value="5" class="radius"></input>

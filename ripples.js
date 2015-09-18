@@ -6,7 +6,7 @@
         var ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        var descriptions = ["", "Slowest", "Slower", "Normal", "Faster", "Fastest"];
+        var descriptions = ["None", "Slowest", "Slower", "Normal", "Faster", "Fastest"];
         var circles = [];
         var mousePos = null;
         var auto = true;
@@ -20,6 +20,8 @@
         var sizeIncrease = 4;
         var shapes = ["CIRCLE", "TRIANGLE", "SQUARE", "HEXAGON"];
         var type = shapes[0];
+        var rotate = 0;
+        var thickness = 1;
         document.addEventListener("mousemove", circle, false);
         document.addEventListener("mousedown", function() { if(click) {circles.push(createCircle());} }, false);
         document.addEventListener("keydown", checkKey, false);
@@ -56,6 +58,13 @@
             }
             click = !click;
         };
+        document.querySelector("input.thickness").onchange = function() {
+            var thicknessType = ["None", "Thinnest", "Thin", "Normal", "Thick", "Thickest"];
+            var values = [0, 1, 3, 5, 10, 20];
+            var selected = parseInt(document.querySelector("input.thickness").value);
+            thickness = values[selected];
+            document.querySelector("label.thickness").innerHTML = `Line Width (${thicknessType[selected]}): `;
+        };
         document.querySelector("input.disappear").onchange = function() {
             var values = [0, 4000, 2000, 1000, 500, 250];
             var selected = parseInt(document.querySelector("input.disappear").value);
@@ -84,6 +93,12 @@
                     document.getElementById("shape").innerHTML = type;
                 }
             }
+        };
+        document.querySelector("input.rotation").onchange = function() {
+            var values = [0, 5000, 1000, 500, 100, 50];
+            var selected = parseInt(document.querySelector("input.rotation").value);
+            rotate = values[selected];
+            document.querySelector("label.rotation").innerHTML = `Rotation Speed (${descriptions[selected]}): `;
         };
         document.querySelector("input.create_speed").onchange = function() {
             createSpeed = parseInt(document.querySelector("input.create_speed").value * 1000);
@@ -166,7 +181,13 @@
                 }
                 ctx.beginPath();
                 ctx.strokeStyle = "hsla("+ circle.hue + ", 100%, 50%, " + circle.transparency + ")";
-                ctx.lineWidth = 1;
+                ctx.lineWidth = thickness;
+                if (rotate !== 0) {
+                    ctx.save();
+                    ctx.translate(circle.x, circle.y);
+                    ctx.rotate((new Date().getTime()/rotate)%(2*Math.PI));
+                    ctx.translate(-circle.x,-circle.y);
+                }
                 if (type === "CIRCLE") {
                     ctx.arc(circle.x, circle.y, circle.radius, 0, 2*Math.PI, false);
                 } else if (type === "TRIANGLE") {
@@ -186,6 +207,9 @@
                     ctx.lineTo(circle.x+circle.radius, circle.y);
                 }
                 ctx.stroke();
+                if (rotate !== 0) {
+                    ctx.restore();
+                }
                 circle.transparency -= (new Date().getTime() - lastFrame)/disappearTime;
                 circle.radius += (new Date().getTime() - lastFrame)/sizeIncrease;
             }
