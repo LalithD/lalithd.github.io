@@ -119,6 +119,16 @@
         var prevTime = new Date().getTime();
         var lastFrame = new Date().getTime();
         animation();
+        document.getElementById("exit").onclick = function() {
+            if (document.getElementById("options").style.display === "none") {
+                document.getElementById("options").style.display = "block";
+                pause = true;
+            } else {
+                document.getElementById("options").style.display = "none";
+                pause = false;
+                animation();
+            }
+        };
         function checkKey(evt) {
             if (evt.keyCode == "p".charCodeAt(0) - 32) {
                 pause = !pause;
