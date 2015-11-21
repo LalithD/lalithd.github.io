@@ -1,6 +1,7 @@
 (function() {
+    "use strict";
     window.onload = function() {
-        window.setInterval(findLocation, 10000);
+        let checkAgain = window.setInterval(findLocation, 1000);
         function findLocation() {
             navigator.geolocation.getCurrentPosition(addLocation);
         }
