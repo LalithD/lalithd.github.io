@@ -4,16 +4,23 @@
         <meta charset="utf-8" />
         <title>Location</title>
         <script src="location.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+        <link href="location.css" rel="stylesheet" />
     </head>
     <body>
         <div id="main">
+            <h1>Location Tracker</h1>
             <table id="main_table">
-                <tr>
-                    <td>Time</td>
-                    <td>Latitude</td>
-                    <td>Longitude</td>
-                    <td>Accuracy</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody id="table_body">
+                </tbody>
             </table>
         </div>
     </body>

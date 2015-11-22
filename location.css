@@ -1,0 +1,29 @@
+html, body {
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    background-color: #3b4453;
+    color: #CCC;
+    font-family: "Slabo 27px", serif;
+}
+#main {
+    width: 100%;
+    height: 100%;
+}
+h1 {
+    font-size: 1.5em;
+    margin: 0.5em auto;
+}
+table {
+    margin: 0 auto;
+    width: 80%;
+    border-collapse: collapse;
+}
+th {
+    background-color: #29252b;
+    color: #CCC;
+}
+table, th, tr, td {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+}
