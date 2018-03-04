@@ -11,7 +11,7 @@
             document.querySelectorAll("img")[0].src = newPic;
         };
     };
-        
+
     function findMatch(string, array) {
         for (var i = 0; i < array.length; i++) {
             if (string == array[i]) {
@@ -20,4 +20,4 @@
         }
         return -1;
     }
-}());
+})();

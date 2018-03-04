@@ -1,0 +1,44 @@
+* {
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+}
+button {
+    font-size: 30pt;
+    margin: 10px auto;
+    display: block;
+    width: 80%;
+    height: 25%;
+    border: none;
+    background-color: rgb(90, 200, 240);
+    border-radius: 10px;
+}
+#number {
+    font-size: 30pt;
+    font-weight: bold;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+span {
+    font-size: 24pt;
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10%;
+    width: 80%;
+}
+#correct {
+    background-color: rgb(70, 180, 88);
+}
+#incorrect {
+    background-color: rgb(180, 70, 88);
+}
+#time {
+    background-color: rgb(90, 200, 240);
+}
+#extra {
+    background-color: rgb(200, 60, 230);
+}

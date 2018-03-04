@@ -7,6 +7,7 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         let DIST = 20;
+        let ANALYZE = false;
         let mouse = {
             x: null,
             y: null
