@@ -1,0 +1,50 @@
+body {
+    background-color: white;
+}
+
+svg {
+    border: 1px solid black;
+}
+
+#svg-map {
+    width: 100%;
+}
+
+#mouseoverDiv, path {
+    cursor: pointer;
+}
+
+path:hover {
+    fill: rgb(49, 203, 244);
+}
+
+#mouseoverDiv {
+    padding: 10px;
+    background-color: rgb(98, 73, 221);
+    color: white;
+    position: fixed;
+    display: none;
+    pointer-events: none;
+    font-family: "Open Sans", sans-serif;
+}
+
+#topContainer {
+
+}
+
+#svgContainer {
+    width: 50%;
+    float: left;
+}
+
+#summaryContainer {
+    background-color: blue;
+    width: 50%;
+    float: right;
+}
+
+#stateNameDiv {
+    font-size: 20pt;
+    text-align: center;
+    font-family: "Open Sans", sans-serif;
+}
