@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+		<link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
+		<link href="ulttictactoe.css" rel="stylesheet" type="text/css">
+		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+		<script src="ulttictactoe.js"></script>
+	</head>
+	<body>
+		<div id="body-container">
+			<dialog id="settings-dialog">
+				<h2>Create New Game...</h2>
+				<div id="pvp-pvm-options">
+					Play against:
+					<br />
+					<input type="radio" id="pvp" name="against-choice" value="player" checked>
+					<label for="pvp"><img src="person.svg" alt="player icon"/>&nbsp;Player</label>
+					<input type="radio" id="pvm" name="against-choice" value="computer">
+					<label for="pvm"><img src="computer.svg" alt="computer icon" />&nbsp;Computer</label>
+				</div>
+				<div id="simulations">
+					<pre>Set max number of simulations (1K to 100K):	</pre><input type="number" id="max-simulations" min="1000" max="100000" step="1000" value="50000">
+				</div>
+				<div id="confirm-settings">
+					<button id="close-settings">Cancel</button>
+					<button id="save-settings">New Game</button>
+				</div>
+			</dialog>
+			<div id="controls-container">
+				<h1>Ultimate Tic&#8209;Tac&#8209;Toe</h1>
+				<div id="instructions"></div>
+				<button id="show-settings">Settings</button>
+			</div>
+			<div id="ttt-grid-container">
+				<svg viewbox="0 0 1200 1200" id="svg-element">
+					<line x1="400" y1="0" x2="400" y2="1200" stroke="black" /> <!-- left vertical -->
+					<line x1="800" y1="0" x2="800" y2="1200" stroke="black" /> <!-- right vertical -->
+					<line x1="0" y1="400" x2="1200" y2="400" stroke="black" /> <!-- top horizontal -->
+					<line x1="0" y1="800" x2="1200" y2="800" stroke="black" /> <!-- bottom horizontal -->
+					<!-- draw big tiles and smaller tiles within them: -->
+					<rect x="0" y="0" id="sb0" class="big-tile tl" />
+
+					<!-- small tiles go here -->
+					<rect x="50" y="50" id="cell0" class="small-tile tl" />
+					<rect x="150" y="50" id="cell1" class="small-tile tm" />
+					<rect x="250" y="50" id="cell2" class="small-tile tr" />
+					<rect x="50" y="150" id="cell9" class="small-tile ml" />
+					<rect x="150" y="150" id="cell10" class="small-tile mm" />
+					<rect x="250" y="150" id="cell11" class="small-tile mr" />
+					<rect x="50" y="250" id="cell18" class="small-tile bl" />
+					<rect x="150" y="250" id="cell19" class="small-tile bm" />
+					<rect x="250" y="250" id="cell20" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="150" y1="50" x2="150" y2="350" stroke="black" /> <!-- small left vertical -->
+					<line x1="250" y1="50" x2="250" y2="350" stroke="black" /> <!-- small right vertical -->
+					<line x1="50" y1="150" x2="350" y2="150" stroke="black" /> <!-- small top horizontal -->
+					<line x1="50" y1="250" x2="350" y2="250" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="400" y="0" id="sb1" class="big-tile tm" />
+
+					<!-- small tiles go here -->
+					<rect x="450" y="50" id="cell3" class="small-tile tl" />
+					<rect x="550" y="50" id="cell4" class="small-tile tm" />
+					<rect x="650" y="50" id="cell5" class="small-tile tr" />
+					<rect x="450" y="150" id="cell12" class="small-tile ml" />
+					<rect x="550" y="150" id="cell13" class="small-tile mm" />
+					<rect x="650" y="150" id="cell14" class="small-tile mr" />
+					<rect x="450" y="250" id="cell21" class="small-tile bl" />
+					<rect x="550" y="250" id="cell22" class="small-tile bm" />
+					<rect x="650" y="250" id="cell23" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="550" y1="50" x2="550" y2="350" stroke="black" /> <!-- small left vertical -->
+					<line x1="650" y1="50" x2="650" y2="350" stroke="black" /> <!-- small right vertical -->
+					<line x1="450" y1="150" x2="750" y2="150" stroke="black" /> <!-- small top horizontal -->
+					<line x1="450" y1="250" x2="750" y2="250" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="800" y="0" id="sb2" class="big-tile tr" />
+
+					<!-- small tiles go here -->
+					<rect x="850" y="50" id="cell6" class="small-tile tl" />
+					<rect x="950" y="50" id="cell7" class="small-tile tm" />
+					<rect x="1050" y="50" id="cell8" class="small-tile tr" />
+					<rect x="850" y="150" id="cell15" class="small-tile ml" />
+					<rect x="950" y="150" id="cell16" class="small-tile mm" />
+					<rect x="1050" y="150" id="cell17" class="small-tile mr" />
+					<rect x="850" y="250" id="cell24" class="small-tile bl" />
+					<rect x="950" y="250" id="cell25" class="small-tile bm" />
+					<rect x="1050" y="250" id="cell26" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="950" y1="50" x2="950" y2="350" stroke="black" /> <!-- small left vertical -->
+					<line x1="1050" y1="50" x2="1050" y2="350" stroke="black" /> <!-- small right vertical -->
+					<line x1="850" y1="150" x2="1150" y2="150" stroke="black" /> <!-- small top horizontal -->
+					<line x1="850" y1="250" x2="1150" y2="250" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="0" y="400" id="sb3" class="big-tile ml" />
+
+					<!-- small tiles go here -->
+					<rect x="50" y="450" id="cell27" class="small-tile tl" />
+					<rect x="150" y="450" id="cell28" class="small-tile tm" />
+					<rect x="250" y="450" id="cell29" class="small-tile tr" />
+					<rect x="50" y="550" id="cell36" class="small-tile ml" />
+					<rect x="150" y="550" id="cell37" class="small-tile mm" />
+					<rect x="250" y="550" id="cell38" class="small-tile mr" />
+					<rect x="50" y="650" id="cell45" class="small-tile bl" />
+					<rect x="150" y="650" id="cell46" class="small-tile bm" />
+					<rect x="250" y="650" id="cell47" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="150" y1="450" x2="150" y2="750" stroke="black" /> <!-- small left vertical -->
+					<line x1="250" y1="450" x2="250" y2="750" stroke="black" /> <!-- small right vertical -->
+					<line x1="50" y1="550" x2="350" y2="550" stroke="black" /> <!-- small top horizontal -->
+					<line x1="50" y1="650" x2="350" y2="650" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="400" y="400" id="sb4" class="big-tile mm" />
+
+					<!-- small tiles go here -->
+					<rect x="450" y="450" id="cell30" class="small-tile tl" />
+					<rect x="550" y="450" id="cell31" class="small-tile tm" />
+					<rect x="650" y="450" id="cell32" class="small-tile tr" />
+					<rect x="450" y="550" id="cell39" class="small-tile ml" />
+					<rect x="550" y="550" id="cell40" class="small-tile mm" />
+					<rect x="650" y="550" id="cell41" class="small-tile mr" />
+					<rect x="450" y="650" id="cell48" class="small-tile bl" />
+					<rect x="550" y="650" id="cell49" class="small-tile bm" />
+					<rect x="650" y="650" id="cell50" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="550" y1="450" x2="550" y2="750" stroke="black" /> <!-- small left vertical -->
+					<line x1="650" y1="450" x2="650" y2="750" stroke="black" /> <!-- small right vertical -->
+					<line x1="450" y1="550" x2="750" y2="550" stroke="black" /> <!-- small top horizontal -->
+					<line x1="450" y1="650" x2="750" y2="650" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="800" y="400" id="sb5" class="big-tile mr" />
+
+					<rect x="850" y="450" id="cell33" class="small-tile tl" />
+					<rect x="950" y="450" id="cell34" class="small-tile tm" />
+					<rect x="1050" y="450" id="cell35" class="small-tile tr" />
+					<rect x="850" y="550" id="cell42" class="small-tile ml" />
+					<rect x="950" y="550" id="cell43" class="small-tile mm" />
+					<rect x="1050" y="550" id="cell44" class="small-tile mr" />
+					<rect x="850" y="650" id="cell51" class="small-tile bl" />
+					<rect x="950" y="650" id="cell52" class="small-tile bm" />
+					<rect x="1050" y="650" id="cell53" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="950" y1="450" x2="950" y2="750" stroke="black" /> <!-- small left vertical -->
+					<line x1="1050" y1="450" x2="1050" y2="750" stroke="black" /> <!-- small right vertical -->
+					<line x1="850" y1="550" x2="1150" y2="550" stroke="black" /> <!-- small top horizontal -->
+					<line x1="850" y1="650" x2="1150" y2="650" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="0" y="800" id="sb6" class="big-tile bl" />
+
+					<!-- small tiles go here -->
+					<rect x="50" y="850" id="cell54" class="small-tile tl" />
+					<rect x="150" y="850" id="cell55" class="small-tile tm" />
+					<rect x="250" y="850" id="cell56" class="small-tile tr" />
+					<rect x="50" y="950" id="cell63" class="small-tile ml" />
+					<rect x="150" y="950" id="cell64" class="small-tile mm" />
+					<rect x="250" y="950" id="cell65" class="small-tile mr" />
+					<rect x="50" y="1050" id="cell72" class="small-tile bl" />
+					<rect x="150" y="1050" id="cell73" class="small-tile bm" />
+					<rect x="250" y="1050" id="cell74" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="150" y1="850" x2="150" y2="1150" stroke="black" /> <!-- small left vertical -->
+					<line x1="250" y1="850" x2="250" y2="1150" stroke="black" /> <!-- small right vertical -->
+					<line x1="50" y1="950" x2="350" y2="950" stroke="black" /> <!-- small top horizontal -->
+					<line x1="50" y1="1050" x2="350" y2="1050" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="400" y="800" id="sb7" class="big-tile bm" />
+
+					<!-- small tiles go here -->
+					<rect x="450" y="850" id="cell57" class="small-tile tl" />
+					<rect x="550" y="850" id="cell58" class="small-tile tm" />
+					<rect x="650" y="850" id="cell59" class="small-tile tr" />
+					<rect x="450" y="950" id="cell66" class="small-tile ml" />
+					<rect x="550" y="950" id="cell67" class="small-tile mm" />
+					<rect x="650" y="950" id="cell68" class="small-tile mr" />
+					<rect x="450" y="1050" id="cell75" class="small-tile bl" />
+					<rect x="550" y="1050" id="cell76" class="small-tile bm" />
+					<rect x="650" y="1050" id="cell77" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="550" y1="850" x2="550" y2="1150" stroke="black" /> <!-- small left vertical -->
+					<line x1="650" y1="850" x2="650" y2="1150" stroke="black" /> <!-- small right vertical -->
+					<line x1="450" y1="950" x2="750" y2="950" stroke="black" /> <!-- small top horizontal -->
+					<line x1="450" y1="1050" x2="750" y2="1050" stroke="black" /> <!-- small bottom horizontal -->
+
+					<rect x="800" y="800" id="sb8" class="big-tile br" />
+
+					<!-- small tiles go here -->
+					<rect x="850" y="850" id="cell60" class="small-tile tl" />
+					<rect x="950" y="850" id="cell61" class="small-tile tm" />
+					<rect x="1050" y="850" id="cell62" class="small-tile tr" />
+					<rect x="850" y="950" id="cell69" class="small-tile ml" />
+					<rect x="950" y="950" id="cell70" class="small-tile mm" />
+					<rect x="1050" y="950" id="cell71" class="small-tile mr" />
+					<rect x="850" y="1050" id="cell78" class="small-tile bl" />
+					<rect x="950" y="1050" id="cell79" class="small-tile bm" />
+					<rect x="1050" y="1050" id="cell80" class="small-tile br" />
+
+					<!-- small lines go here -->
+					<line x1="950" y1="850" x2="950" y2="1150" stroke="black" /> <!-- small left vertical -->
+					<line x1="1050" y1="850" x2="1050" y2="1150" stroke="black" /> <!-- small right vertical -->
+					<line x1="850" y1="950" x2="1150" y2="950" stroke="black" /> <!-- small top horizontal -->
+					<line x1="850" y1="1050" x2="1150" y2="1050" stroke="black" /> <!-- small bottom horizontal -->
+
+				</svg>
+			</div>
+		</div>
+	</body>
+</html>
