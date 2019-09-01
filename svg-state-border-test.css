@@ -1,4 +1,5 @@
 body {
+    -webkit-filter: blur(2px);
     background-color: white;
 }
 
@@ -6,7 +7,7 @@ svg {
     border: 1px solid black;
 }
 
-#svg-map {
+#svgMap {
     width: 100%;
 }
 
@@ -20,7 +21,7 @@ path:hover {
 
 #mouseoverDiv {
     padding: 10px;
-    background-color: rgb(98, 73, 221);
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     position: fixed;
     display: none;
@@ -28,9 +29,9 @@ path:hover {
     font-family: "Open Sans", sans-serif;
 }
 
-#topContainer {
-
-}
+/* #topContainer {
+    height: 20%;
+} /**/
 
 #svgContainer {
     width: 50%;
@@ -38,7 +39,7 @@ path:hover {
 }
 
 #summaryContainer {
-    background-color: blue;
+    background-color: rgba(0, 0, 255, 0.5);
     width: 50%;
     float: right;
 }
@@ -47,4 +48,32 @@ path:hover {
     font-size: 20pt;
     text-align: center;
     font-family: "Open Sans", sans-serif;
+}
+
+#darken {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 99;
+}
+
+#overlay {
+    display: block;
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    background-color: white;
+    z-index: 100;
+}
+
+#overlayTopBar {
+    width: 100%;
+    height: 10%;
+    background-color: blue;
 }

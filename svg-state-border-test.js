@@ -4,6 +4,8 @@
     window.onload = function() {
         console.log("SVG load function running.");
 
+        let initMap = document.getElementById("svgMap");
+
         let pathArr = document.getElementsByTagName("path");
 
         for (let i = 0; i < pathArr.length; ++i) {
@@ -31,8 +33,15 @@
         function clickAction(evt) {
             let stateName = evt.target.getAttribute("id");
             // alert(stateName + " double clicked!");
-            document.getElementById("stateNameDiv").innerText = stateName;
+            // document.getElementById("stateNameDiv").innerText = stateName;
+            document.getElementById("darken").style.display = "block";
         }
-
+        document.getElementById("darken").onclick = function() {
+            this.style.display = "none";
+            // document.getElementById("overlay").style.display = "none";
+        };
+        document.getElementById("overlay").onclick = function() {
+            event.stopPropagation();
+        };
     };
 }());
