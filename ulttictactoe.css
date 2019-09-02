@@ -10,6 +10,8 @@
 svg { /* set size of entire board board */
     width: 70vh;
     height: 70vh;
+    max-width: 100vw;
+    max-height: 100vw;
 }
 
 .big-tile { /* set color of a tile and size of tile relative to svg's viewbox */
