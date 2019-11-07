@@ -3,7 +3,7 @@
 }
 
 #ttt-grid-container {
-    background-color: white;/*#434343*/;
+    background-color: white;
     text-align: center;
 }
 
@@ -12,6 +12,28 @@ svg { /* set size of entire board board */
     height: 70vh;
     max-width: 100vw;
     max-height: 100vw;
+}
+
+#game-status-banner {
+  width: 70vh;
+  max-width: 100vw;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 24px;
+}
+
+.banner-red {
+  background-color: rgba(255, 0, 0, 0.4);
+}
+
+.banner-blue {
+  background-color: rgba(0, 0, 255, 0.4);
+}
+
+.banner-purple {
+  background-color: rgba(128, 0, 128, 0.4);
 }
 
 .big-tile { /* set color of a tile and size of tile relative to svg's viewbox */
@@ -53,7 +75,6 @@ dialog { /* setting box display */
 h2 {
     text-align: center;
     overflow: hidden;
-    /*background-color: white;*/
     margin-top: 0px;
     margin-left: 0px;
     margin-right: 0px;

@@ -1,7 +1,5 @@
 "use strict";
 
-const MAX_SIMULATIONS = 10000;
-
 const MOVE_MAPPING = [
 	[0, 1, 2, 9, 10, 11, 18, 19, 20],
 	[3, 4, 5, 12, 13, 14, 21, 22, 23],
@@ -14,15 +12,31 @@ const MOVE_MAPPING = [
 	[60, 61, 62, 69, 70, 71, 78, 79, 80]
 ];
 
+/*
+Returns the small board upon which next player must make their move
+@param {number} cellNum is the cell's position, 0 to 80
+@return {number} of the next small board (0 to 8)
+*/
 function getNextSmallBoard(cellNum) {
 	return parseInt(3 * (((cellNum - (cellNum % 9)) / 9) % 3) + cellNum % 3);
 }
 
-function getCurrSmallBoard(cellNum)
-{
+/*
+Returns the small board which correspond's to cellNum
+@param {number} cellNum is the cell's position, 0 to 80
+@return {number} of the small board which contains cellNum (0 to 8)
+*/
+function getCurrSmallBoard(cellNum) {
 	return parseInt((cellNum - cellNum % 27) / 9 + Math.floor((cellNum % 9) / 3));
 }
 
+/*
+Returns whether or not the small board has been solved
+(0 for unsolved/incomplete, 1 or 2 if solved by player 1 or 2, and 3 if tied)
+@param {array} board, is an 81-length array containing the board state
+@param {number} smallBoardNum, which 0 to 8, representing the small board to be checked
+@return {number}
+*/
 function isSmallBoardSolved(board, smallBoardNum) {
 	let start = MOVE_MAPPING[smallBoardNum][0];
 	for (let i = 0; i < 3; ++i) {
@@ -51,6 +65,11 @@ function isSmallBoardSolved(board, smallBoardNum) {
 	return 3;
 }
 
+/*
+Returns whether the game is over (0 for ongoing, 1 or 2 if player 1 or 2 won, and 3 for tie)
+@param {array} smallBoardsSolved, which is a 9-length array of the small boards which have been solved
+@return {number}
+*/
 function isGameOver(smallBoardsSolved) {
 	for (let i = 0; i < 3; ++i) {
 		// check horizontals for a victory
@@ -82,25 +101,33 @@ function isGameOver(smallBoardsSolved) {
 
 class TreeNode {
 	constructor(move, player, parent) {
-		this.totalSims = 0;
+		this.totalSims = 0; // keeps track of total simulations for this node
 		this.newMove = move;
 		this.player = player;
-		this.successfulSims = 0;
-		this.parent = parent;
-		this.children = [];
+		this.successfulSims = 0; // these are the "good" outcomes
+		this.parent = parent; // set parent node
+		this.children = []; // child node list
 		if (TreeNode.totalSims === undefined || TreeNode.totalSims === null) {
-			TreeNode.totalSims = 0;
+			TreeNode.totalSims = 0; // keeps track of total simulations for all TreeNode objects (i.e. root)
 		}
 	}
 
+	/*
+	Return the score of the node, used for determining best path to take (taking into account # of simulations)
+	@return {number} which loosely prioritizes rarely visited branches and high success rates
+	*/
 	getScore() {
 		if (this.totalSims === 0) {
-			return Infinity;
+			return Infinity; // this means a new child will always be prioritized in a search
 		} else {
 			return this.successfulSims/this.totalSims + Math.sqrt(2) * Math.sqrt(Math.log(TreeNode.totalSims)/this.totalSims);
 		}
 	}
 
+	/*
+	Finds and returns the best child, based on the highest getScore() value
+	@return {TreeNode}
+	*/
 	getBestSearchChild() {
 		let bestNode = null;
 		let bestScore = -Infinity;
@@ -114,6 +141,10 @@ class TreeNode {
 		return bestNode;
 	}
 
+	/*
+	Finds and returns the child with the highest success rate.
+	@return {TreeNode}
+	*/
 	getBestChoice() {
 		let bestNode = null;
 		let bestScore = -Infinity;
@@ -132,6 +163,11 @@ class TreeNode {
 		return bestNode;
 	}
 
+	/*
+	After move is made, this updates simulation and success counts by going all the way to root.
+	@param {number} result is a number 1, 2, or 3 representing which player won (or a tie)
+	@return {void}
+	*/
 	backpropagate(result) {
 		this.totalSims += 1;
 		if (this.player === result) {
@@ -201,7 +237,6 @@ class GameState {
 				} else {
 					this.tree = new TreeNode(move, player, null);
 					TreeNode.totalSims = 0;
-					console.log("Reset tree! This shouldn't usually happen...");
 				}
 			}
 		} else {
@@ -273,33 +308,39 @@ class GameState {
 	}
 }
 
-var maxSimulations = 50000; /* sets maximum number of simulations */
+var maxSimulations = 100000; /* sets maximum number of simulations */
 var newGameOpponent = "computer";
 var mainGame = new GameState(); // main game logic goes here.
-for (let i = 0; i < MAX_SIMULATIONS; ++i) {
-	mainGame.buildTree();
-}
+mainGame.buildTree();
 var isPlayerTurn = true;
 
 window.onload = function() {
 	"use strict";
 	console.log("Index.js loaded");
 
-	// test out web worker
-	let worker = new Worker("worker.js");
-	worker.postMessage("Send a message to worker.");
+	// create worker here.
+	let worker = new Worker(URL.createObjectURL(new Blob(["("+simulation_worker.toString()+")()"], {type: 'text/javascript'})));
 	worker.addEventListener("message", function(e) {
-		console.log("Worker replied: " + e.data);
+		console.log(e.data);
+		if (e.data["message"] === "ending") {
+			if (mainGame.getAvailableMoves().includes(e.data["move"])) {
+				addMoveAndUpdate(mainGame, e.data["move"], 2);
+				worker.postMessage({
+					"message": "start",
+					"maxIterations": maxSimulations,
+					"game": mainGame
+				});
+				isPlayerTurn = mainGame.gameStatus === 0;
+			} else {
+				console.log("An error occurred after receiving move from worker!");
+			}
+		}
 	}, false);
-
-	/*
-	var maxSimulations = 50000;
-	var newGameOpponent = "computer";
-	var mainGame = new GameState(); // main game logic goes here.
-	for (let i = 0; i < MAX_SIMULATIONS; ++i) {
-		mainGame.buildTree();
-	}
-	var isPlayerTurn = true;*/
+	worker.postMessage({
+		"message": "start",
+		"maxIterations": maxSimulations,
+		"game": mainGame
+	});
 
 	document.getElementById("show-settings").onclick = function () {
 		document.getElementById("settings-dialog").showModal();
@@ -307,9 +348,9 @@ window.onload = function() {
 
 	document.getElementById("save-settings").onclick = function() {
 		console.log("Settings saved!");
-		// TODO: actually save the settings
+		// Actually save the settings
 		let newMaxSimVal = parseInt(document.getElementById("max-simulations").value);
-		maxSimulations = Math.max(1000, Math.min(100000, newMaxSimVal));
+		maxSimulations = Math.max(1000, Math.min(200000, newMaxSimVal));
 		let optionsArr = document.getElementsByName("against-choice");
 		for (let i = 0; i < optionsArr.length; ++i) {
 			if (optionsArr[i].checked) {
@@ -317,19 +358,28 @@ window.onload = function() {
 				console.log("Next game is against", optionsArr[i].value);
 			}
 		}
-		// TODO: do all the code to start a new game (clear current game, clear temporary variables, etc)
+		// Start a new game (clear current game, clear temporary variables, etc)
 		mainGame = new GameState();
+		document.getElementById("game-status-banner").classList.remove("banner-blue");
+		document.getElementById("game-status-banner").classList.add("banner-red");
+		document.getElementById("game-status-banner").textContent = "Player 1 Turn (X)";
 		let clearElements = document.querySelectorAll(".small-tile, .big-tile");
 		for (let i = 0; i < clearElements.length; ++i) {
 			clearElements[i].classList.remove("cross");
 			clearElements[i].classList.remove("circle");
 			clearElements[i].classList.remove("available");
 		}
-		for (let i = 0; i < MAX_SIMULATIONS; ++i) {
-			mainGame.buildTree();
+		let playerMoveIcons = document.querySelectorAll("g[marker-type=\"player-move\"]");
+		for (let i = 0; i < playerMoveIcons.length; ++i) {
+			playerMoveIcons[i].parentNode.removeChild(playerMoveIcons[i]);
 		}
+		mainGame.buildTree();
+		worker.postMessage({
+			"message": "start",
+			"maxIterations": maxSimulations,
+			"game": mainGame
+		});
 		document.getElementById("settings-dialog").close();
-		console.log("Settings dialog box closed!");
 	};
 
 	document.getElementById("close-settings").onclick = function() {
@@ -337,7 +387,6 @@ window.onload = function() {
 		document.getElementById("max-simulations").value = maxSimulations;
 		document.getElementById(newGameOpponent === "computer" ? "pvp" : "pvm").checked = true;
 		document.getElementById("settings-dialog").close();
-		console.log("Settings dialog box closed!");
 	};
 
 	let smallTilesArr = document.getElementsByClassName("small-tile");
@@ -351,34 +400,18 @@ window.onload = function() {
 	@return number that represents status
 	*/
 	function cellClicked(e) {
-		/*if (mainGame === null || mainGame.gameStatus !== 0) {
-			console.log("Game is over!");
-			return 1;
-		}
-		if (!isPlayerTurn && newGameOpponent === "computer") {
-			console.log("It is not your turn!");
-			return 2;
-		}*/
 		if (mainGame !== null && mainGame.gameStatus === 0 && isPlayerTurn) {
 			isPlayerTurn = false;
 			let cellNum = parseInt(e.srcElement.getAttribute("id").substring("cell".length));
 			if (mainGame.getAvailableMoves().includes(cellNum)) {
 				addMoveAndUpdate(mainGame, cellNum, 1);
 				if (mainGame.gameStatus !== 0) {
-					// TODO: handle game-over logic here.
+					// TODO: handle game-over logic here?
 				} else if (newGameOpponent === "computer") {
-					addMoveAndUpdate(mainGame, mainGame.tree.getBestChoice().newMove, 2);
-					if (mainGame.gameStatus === 0) {
-						// TODO: consider letting player know that it is their turn.
-						isPlayerTurn = true;
-						runSimulationLoop(mainGame);
-						/*runSimulationLoop2(mainGame, maxSimulations).then(() => {
-							console.log("Finally done!!!!!!!!!!!!!!");
-						});*/
-						// create web worker here?
-					} else {
-						// TODO: handle game over logic here.
-					}
+					worker.postMessage({
+						"message": "end",
+						"playerMove": cellNum
+					});
 				}
 			} else {
 				console.log("Invalid move.");
@@ -396,11 +429,38 @@ window.onload = function() {
 	@return void
 	*/
 	function addMoveAndUpdate(game, move, player) {
-		console.log("Adding move from Player", player);
 		if (game.getAvailableMoves().includes(move)) {
 			game.addMove(move, player, true);
+			if (game.gameStatus === 1) {
+				// player 1 wins
+				document.getElementById("game-status-banner").classList.remove("banner-blue");
+				document.getElementById("game-status-banner").classList.add("banner-red");
+				document.getElementById("game-status-banner").textContent = "Player 1 (X) wins!";
+			} else if (game.gameStatus === 2) {
+				// player 2 wins
+				document.getElementById("game-status-banner").classList.remove("banner-red");
+				document.getElementById("game-status-banner").classList.add("banner-blue");
+				document.getElementById("game-status-banner").textContent = "Player 2 (O) wins!";
+			} else if (game.gameStatus === 3) {
+				// tie
+				document.getElementById("game-status-banner").textContent = "It's a tie!";
+				document.getElementById("game-status-banner").classList.remove("banner-red");
+				document.getElementById("game-status-banner").classList.remove("banner-blue");
+				document.getElementById("game-status-banner").classList.add("banner-purple");
+			} else {
+				if (player === 1) {
+					// game not over and player 1 just made a move
+					document.getElementById("game-status-banner").classList.remove("banner-red");
+					document.getElementById("game-status-banner").classList.add("banner-blue");
+				} else {
+					// game not over and player 2 just made a move
+					document.getElementById("game-status-banner").classList.remove("banner-blue");
+					document.getElementById("game-status-banner").classList.add("banner-red");
+				}
+				document.getElementById("game-status-banner").textContent = player === 1 ? "Player 2 Turn (O)" : "Player 1 Turn (X)";
+			}
 			document.getElementById("cell" + move).classList.add(player === 1 ? "cross" : "circle");
-			// add circle or cross?
+			// add circle or cross
 			document.getElementById("svg-element").appendChild(createShape(player === 1 ? "cross" : "circle", move));
 			for (let i = 0; i < 9; ++i) {
 				if (game.smallBoardsSolved[i] !== 0) {
@@ -415,7 +475,6 @@ window.onload = function() {
 				document.getElementById("cell" + availableMoves[i]).classList.add("available");
 			}
 		}
-		console.log("Finished adding move from Player", player);
 	}
 
 	/*
@@ -427,6 +486,7 @@ window.onload = function() {
 	function createShape(shapeType, move) {
 		if (shapeType === "cross") {
 			let groupEl = document.createElementNS("http://www.w3.org/2000/svg", "g");
+			groupEl.setAttribute("marker-type", "player-move");
 			groupEl.style.stroke = "black";
 			let crossLine1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
 			groupEl.appendChild(crossLine1);
@@ -443,6 +503,7 @@ window.onload = function() {
 			return groupEl;
 		} else if (shapeType === "circle") {
 			let groupEl = document.createElementNS("http://www.w3.org/2000/svg", "g");
+			groupEl.setAttribute("marker-type", "player-move");
 			groupEl.style.stroke = "black";
 			groupEl.style.fill = "none";
 			let circleEl = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -455,42 +516,4 @@ window.onload = function() {
 			console.error("<shapeType> parameter is invalid. Must be 'cross' or 'circle'.")
 		}
 	}
-
-	/*
-	Runs simulation for maxSimulation number of trials
-	@param {GameState} game: the game object
-	@return 0 or 1 depending on whether the loop ends because it is now player's turn or because maxTrials has been reached
-	*/
-	function runSimulationLoop(game) {
-		console.log("Entered simulation loop.");
-		let countTrials = 0;
-		while (isPlayerTurn && TreeNode.totalSims <= maxSimulations) {
-			// the idea here is to run only while it is player's turn; on computer's turn, stop and make best move found so far
-			game.buildTree();
-			countTrials++;
-			if (!isPlayerTurn) {
-				console.log("Player turn... exiting with", countTrials, "trials.");
-				return 0;
-			}
-		}
-		console.log("Ran", countTrials, "trials.");
-		return 1;
-	}
-
-	/*function runSimulationLoop2(game, remainingTrials) {
-		// console.log(game);
-		if (remainingTrials === 0) {
-			return Promise.resolve();
-		}
-		return promiseFactory(game).then(() => {
-			return runSimulationLoop2(game, remainingTrials-1);
-		});
-	}
-
-	function promiseFactory(game) {
-		return new Promise((resolve, reject) => {
-			game.buildTree();
-			resolve();
-		})
-	}*/
 };

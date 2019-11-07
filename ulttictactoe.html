@@ -7,6 +7,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
 		<link href="ulttictactoe.css" rel="stylesheet" type="text/css">
 		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+		<script src="ulttictactoeworker.js"></script>
 		<script src="ulttictactoe.js"></script>
 	</head>
 	<body>
@@ -22,7 +23,7 @@
 					<label for="pvm"><img src="computer.svg" alt="computer icon" />&nbsp;Computer</label>
 				</div>
 				<div id="simulations">
-					<pre>Set max number of simulations (1K to 100K):	</pre><input type="number" id="max-simulations" min="1000" max="100000" step="1000" value="50000">
+					<pre>Set max number of simulations (1K to 200K):	</pre><input type="number" id="max-simulations" min="1000" max="200000" step="1000" value="50000">
 				</div>
 				<div id="confirm-settings">
 					<button id="close-settings">Cancel</button>
@@ -35,6 +36,7 @@
 				<button id="show-settings">Settings</button>
 			</div>
 			<div id="ttt-grid-container">
+				<div id="game-status-banner" class="banner-red">Player 1 Turn (X)</div>
 				<svg viewbox="0 0 1200 1200" id="svg-element">
 					<line x1="400" y1="0" x2="400" y2="1200" stroke="black" /> <!-- left vertical -->
 					<line x1="800" y1="0" x2="800" y2="1200" stroke="black" /> <!-- right vertical -->
