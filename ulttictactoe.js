@@ -404,7 +404,7 @@ window.onload = function() {
 			isPlayerTurn = false;
 			let cellNum = parseInt(e.srcElement.getAttribute("id").substring("cell".length));
 			if (mainGame.getAvailableMoves().includes(cellNum)) {
-				addMoveAndUpdate(mainGame, cellNum, 1);
+				addMoveAndUpdate(mainGame, cellNum, mainGame.board[mainGame.lastMove] === 1 ? 2 : 1);
 				if (mainGame.gameStatus !== 0) {
 					// TODO: handle game-over logic here?
 				} else if (newGameOpponent === "computer") {
@@ -412,6 +412,8 @@ window.onload = function() {
 						"message": "end",
 						"playerMove": cellNum
 					});
+				} else {
+					isPlayerTurn = true;
 				}
 			} else {
 				console.log("Invalid move.");
@@ -463,8 +465,10 @@ window.onload = function() {
 			// add circle or cross
 			document.getElementById("svg-element").appendChild(createShape(player === 1 ? "cross" : "circle", move));
 			for (let i = 0; i < 9; ++i) {
-				if (game.smallBoardsSolved[i] !== 0) {
-					document.getElementById("sb" + i).classList.add(game.smallBoardsSolved[i] === 1 ? "cross" : "circle");
+				if (game.smallBoardsSolved[i] === 1) {
+					document.getElementById("sb" + i).classList.add("cross");
+				} else if (game.smallBoardsSolved[i] === 2) {
+					document.getElementById("sb" + i).classList.add("circle");
 				}
 			}
 			let availableMoves = game.getAvailableMoves();

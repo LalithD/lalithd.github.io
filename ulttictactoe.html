@@ -6,14 +6,14 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 		<link href="https://fonts.googleapis.com/css?family=Cutive+Mono" rel="stylesheet">
 		<link href="ulttictactoe.css" rel="stylesheet" type="text/css">
-		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+		<!--<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>-->
 		<script src="ulttictactoeworker.js"></script>
 		<script src="ulttictactoe.js"></script>
 	</head>
 	<body>
 		<div id="body-container">
 			<dialog id="settings-dialog">
-				<h2>Create New Game...</h2>
+				<h2>Create New Game</h2>
 				<div id="pvp-pvm-options">
 					Play against:
 					<br />
@@ -23,7 +23,7 @@
 					<label for="pvm"><img src="computer.svg" alt="computer icon" />&nbsp;Computer</label>
 				</div>
 				<div id="simulations">
-					<pre>Set max number of simulations (1K to 200K):	</pre><input type="number" id="max-simulations" min="1000" max="200000" step="1000" value="50000">
+					Set max number of simulations:&nbsp;<input type="number" id="max-simulations" min="1000" max="200000" step="1000" value="50000">
 				</div>
 				<div id="confirm-settings">
 					<button id="close-settings">Cancel</button>
