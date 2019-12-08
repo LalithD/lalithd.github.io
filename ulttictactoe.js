@@ -308,7 +308,7 @@ class GameState {
 	}
 }
 
-var maxSimulations = 100000; /* sets maximum number of simulations */
+var maxSimulations = 50000; /* sets maximum number of simulations */
 var newGameOpponent = "computer";
 var mainGame = new GameState(); // main game logic goes here.
 mainGame.buildTree();
@@ -380,6 +380,7 @@ window.onload = function() {
 			"game": mainGame
 		});
 		document.getElementById("settings-dialog").close();
+		isPlayerTurn = true;
 	};
 
 	document.getElementById("close-settings").onclick = function() {
