@@ -18,7 +18,7 @@
         let totalCost = 0;
         let current = 0;
         for (let item of sack) {
-            totalCost += item.cost;
+            totalCost += item.cost * item.answer;
             let newRow = document.createElement("tr");
             table.appendChild(newRow);
             let cost = document.createElement("td");
