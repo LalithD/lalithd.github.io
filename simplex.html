@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Simplex Algorithm Solver</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="simplex.css" rel="stylesheet" />
+        <script src="simplex.js"></script>
+    </head>
+    <body>
+        <h1>Simplex Algorithm Solver</h1>
+        <div id="initOptions">
+            Choose number of variables:
+            <select id="numVarsSelection" name="numVars">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            <br />
+            Choose number of equations:
+            <select id="numEquationsSelection" name="numEquations">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            <br />
+            <button id="initOptionsButton">Set up</button>
+        </div>
+        <div id="instructions">
+            <span id="confirmTableau">
+                <span id="confirmTableauMsg">Fill out the remaining values in the initial tableau below with integers and/or fractions (e.g. "2" or "-3/7"). Once you are done, click "Confirm" to begin solving.</span>
+                <br />
+                <button id="confirmTableauButton">Confirm</button>
+            </span>
+            <br />
+            <span id="chooseColumn">Click on an appropriate pivot column.</span>
+            <br />
+            <span id="chooseRow">Click on an appropriate pivot cell.</span>
+            <br />
+            <span id="solveInstruction">
+                <span id="solveInstructionMsg">Click "Next" to perform Gaussian elimination on the selected pivot.</span>
+                <br />
+                <button id="solveRow">Next</button>
+            </span>
+            <span id="terminateMsg">
+                <span id="terminateComplete">
+                    Since the tableau is primal and dual feasible, the algorithm terminates. The solution is <span id="solutionX"></span> with optimal value <span id="solutionOptimal"></span>.
+                </span>
+                <span id="terminateUnbounded">Since there is no eligible pivot cell for an eligible pivot column, this problem is unbounded.</span>
+            </span>
+        </div>
+        <div id="tableau"> <!-- This is where we draw the tableau -->
+        </div>
+    </body>
+</html>
