@@ -1,8 +1,7 @@
 body {
-    /*background-color: rgb(130, 203, 215);*/
     background-color: rgb(240, 240, 240);
     font-family: Arial, Helvetica, sans-serif;
-        color: rgb(0, 35, 40);
+    color: rgb(0, 35, 40);
 }
 a {
     background-color: rgb(93, 186, 201);
@@ -14,11 +13,11 @@ a {
     margin-left: 5%;
     margin-bottom: 5%;
     float: left;
-    transition: 2s;
-    height: 100%;
+    transition: 1s;
+    height: auto;
 }
 a:hover {
-    background-color: rgb(35, 100, 110);
+    background-color: rgba(51, 122, 133);
     color: rgb(186, 255, 255);
 }
 h1, h2 {
@@ -37,4 +36,9 @@ img {
     border-radius: 10px;
     display: block;
     margin: auto;
+}
+
+#project_list {
+    display: flex;
+    flex-flow: row wrap;
 }
