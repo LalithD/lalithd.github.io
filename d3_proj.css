@@ -1,0 +1,131 @@
+html, body {
+    margin: 0 auto;
+    padding: 0;
+    height: 100%;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+#main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#header {
+    flex-basis: 2;
+    flex-grow: 4;
+}
+
+#options {
+    display: none;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+#svgcontainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 6;
+    flex-grow: 6;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#footer {
+    flex-basis: 1;
+}
+
+circle {
+    stroke: black;
+}
+
+svg {
+    border: 1px solid black;
+    max-width: 80%;
+}
+
+#title {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+#controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+#controls div {
+    text-align: center;
+    flex: 1;
+    padding: 25px;
+    background-color: antiquewhite;
+    font-size: 24pt;
+}
+
+#description {
+    padding-left: 15%;
+    padding-right: 15%;
+    font-size: 16pt;
+}
+
+.hide-text {
+    display: none;
+}
+
+#tooltip {
+    display: none;
+    position: fixed;
+    pointer-events: none;
+    left: 100;
+    top: 100;
+    padding: 10px;
+    font-weight: bold;
+    font-family: Arial;
+    line-height: 1.5em;
+    transition: background-color 1s ease;
+}
+
+#graphtitle, #graphxaxis, #graphyaxis {
+    text-anchor: middle;
+}
+
+select {
+    padding: 5px;
+    font-size: 14pt;
+}
+
+label {
+    font-size: 14pt;
+}
+
+.cost {
+    background-color: hsl(0, 60%, 70%, 0.5);
+    color: hsl(0, 60%, 20%);
+}
+
+.units {
+    background-color: hsl(145, 50%, 70%, 0.5);
+    color: hsl(145, 50%, 20%);
+}
+
+.dollars {
+    background-color: hsl(200, 50%, 70%, 0.5);
+    color: hsl(210, 50%, 20%);
+}
+
+path {
+    transition: all 0.5s linear;
+}
+
+.hide {
+    opacity: 0;
+}

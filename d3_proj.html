@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Food Prices</title>
+        <link href="d3_proj.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+        <script src="d3_proj.js"></script>
+    </head>
+    <body>
+        <div id="main">
+            <div id="header">
+                <div id="title">Weekly Food Prices and Consumption</div>
+                <div id="description"></div>
+                <div id="slide1-text" class="hide-text">This webpage shows the weekly food prices and quantity purchased for various states and food products over the past several years. We can start by looking at the number of beverages sold in CA. The most apparent pattern here is the high seasonality in products sold - beverages are most popular in the summer months and not very popular in winter. We also note the huge spike in quantity sold when Covid lockdowns began and households bought out grocery stores to stock up. Click next below to look at how we can determine inflation for this particular product.</div>
+                <div id="slide2-text" class="hide-text">We're still looking at beverages sold in CA, but now we're concerned with inflation. We can see that the average price paid for a beverages starts at about $2.5 and increases up to $3.5. Most of this increase seems to happen after mid-2021, which loosely aligns with the US government's estimates of CPI and inflation. On the next slide, you will be able to look at different states and food products to identify seasonality, outliers, and inflation.</div>
+                <div id="slide3-text" class="hide-text">You may use the dropdowns to filter the dataset to particular states and food products, as well as change the y-axis. You can start by filtering to Alcohol products. Do you think it will have the same inflation pattern? Can you explain why alcohol's seasonality looks different from beverages? Do all states behave similarly for the same food type?</div>
+                <div id="tooltip" class="units"></div>
+                <div id="options">
+                    <label for="category">Food category:</label>
+                    <select id="category" name="category" class="dollars">
+                        <!--<option value="All">All</option>-->
+                        <option value="Alcohol">Alcohol</option>
+                        <option value="Beverages" selected>Beverages</option>
+                        <option value="Commercially prepared items">Commercially prepared items</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Fats and oils">Fats and oils</option>
+                        <option value="Fruits">Fruits</option>
+                        <option value="Grains">Grains</option>
+                        <option value="Meats, eggs, and nuts">Meats, eggs, and nuts</option>
+                        <option value="Other">Other</option>
+                        <option value="Sugar and sweeteners">Sugar and sweeteners</option>
+                        <option value="Vegetables">Vegetables</option>
+                    </select>
+                    <label for="state">State:</label>
+                    <select id="state" name="state" class="dollars">
+                        <!--<option value="All">All</option>-->
+                        <option value="AL">AL</option>
+                        <option value="AR">AR</option>
+                        <option value="AZ">AZ</option>
+                        <option value="CA" selected>CA</option>
+                        <option value="CO">CO</option>
+                        <option value="CT">CT</option>
+                        <option value="FL">FL</option>
+                        <option value="GA">GA</option>
+                        <option value="IA">IA</option>
+                        <option value="IL">IL</option>
+                        <option value="IN">IN</option>
+                        <option value="KS">KS</option>
+                        <option value="KY">KY</option>
+                        <option value="LA">LA</option>
+                        <option value="MA">MA</option>
+                        <option value="MD">MD</option>
+                        <option value="ME">ME</option>
+                        <option value="MI">MI</option>
+                        <option value="MN">MN</option>
+                        <option value="MO">MO</option>
+                        <option value="MS">MS</option>
+                        <option value="NC">NC</option>
+                        <option value="NE">NE</option>
+                        <option value="NH">NH</option>
+                        <option value="NM">NM</option>
+                        <option value="NV">NV</option>
+                        <option value="NY">NY</option>
+                        <option value="OH">OH</option>
+                        <option value="OK">OK</option>
+                        <option value="OR">OR</option>
+                        <option value="PA">PA</option>
+                        <option value="RI">RI</option>
+                        <option value="SC">SC</option>
+                        <option value="SD">SD</option>
+                        <option value="TN">TN</option>
+                        <option value="TX">TX</option>
+                        <option value="UT">UT</option>
+                        <option value="VA">VA</option>
+                        <option value="VT">VT</option>
+                        <option value="WA">WA</option>
+                        <option value="WI">WI</option>
+                        <option value="WV">WV</option>
+                        <option value="WY">WY</option>
+                    </select>
+                    <label for="yaxisvalue">Y-axis:</label>
+                    <select id="yaxisvalue" name="yaxisvalue" class="dollars">
+                        <!--<option value="All">All</option>-->
+                        <option value="Dollars">Dollars</option>
+                        <option value="Units" selected>Units</option>
+                        <option value="cost_per_unit">cost_per_unit</option>
+                    </select>
+                </div>
+            </div>
+            <div id="svgcontainer">
+                <svg viewbox="0 0 1600 800">
+                    <g id="mainline"></g>
+                    <g id="maline"></g>
+                    <line id="cursorline" />
+                    <g id="xaxis"></g>
+                    <g id="yaxis"></g>
+                </svg>
+            </div>
+            <div id="footer">
+                <div id="controls">
+                    <div id="slideback" class="hide">Back</div>
+                    <div id="slidedesc">Slide 1/3</div>
+                    <div id="slideforward">Next</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
